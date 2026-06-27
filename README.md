@@ -11,6 +11,30 @@ npm run dev
 
 若尚未設定 Supabase 環境變數，頁面會使用 mock 資料方便檢視 UI 與抽考流程。
 
+## 手機測試
+
+手機和電腦需連到同一個 Wi-Fi，然後用區網模式啟動：
+
+```bash
+npm run dev:lan
+```
+
+在手機瀏覽器開啟：
+
+```text
+http://你的電腦區網IP:3000
+```
+
+例如目前這台電腦偵測到的區網 IP 是 `172.30.1.10`，可試：
+
+```text
+http://172.30.1.10:3000
+```
+
+若手機仍無法開啟，請確認 macOS 防火牆允許 Node.js/Next.js 接受區網連線，且手機沒有使用不同網段或 VPN。
+
+若要離開家裡 Wi-Fi 後也能用手機開啟，請部署到 Vercel，並設定 Supabase 環境變數與資料庫 schema。
+
 ## Supabase
 
 1. 建立 Supabase 專案。
