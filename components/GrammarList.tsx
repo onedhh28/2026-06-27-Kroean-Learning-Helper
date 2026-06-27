@@ -1,19 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { courseSourceLabel } from "@/lib/display";
 import type { Grammar } from "@/lib/types";
 import { LibraryFilters } from "./LibraryFilters";
 
 type GrammarListProps = {
   items: Grammar[];
   chapters: string[];
-  sources: string[];
 };
 
-export function GrammarList({ items, chapters, sources }: GrammarListProps) {
+export function GrammarList({ items, chapters }: GrammarListProps) {
   const [search, setSearch] = useState("");
   const [chapter, setChapter] = useState("");
-  const [source, setSource] = useState("");
 
   const filtered = useMemo(() => {
     const keyword = search.trim().toLowerCase();
@@ -32,23 +31,13 @@ export function GrammarList({ items, chapters, sources }: GrammarListProps) {
           .filter(Boolean)
           .some((value) => value!.toLowerCase().includes(keyword));
       const matchesChapter = !chapter || item.chapters.includes(chapter);
-      const matchesSource = !source || item.source === source;
-      return matchesKeyword && matchesChapter && matchesSource;
+      return matchesKeyword && matchesChapter;
     });
-  }, [chapter, items, search, source]);
+  }, [chapter, items, search]);
 
   return (
     <>
-      <LibraryFilters
-        chapters={chapters}
-        sources={sources}
-        search={search}
-        setSearch={setSearch}
-        chapter={chapter}
-        setChapter={setChapter}
-        source={source}
-        setSource={setSource}
-      />
+      <LibraryFilters chapters={chapters} search={search} setSearch={setSearch} chapter={chapter} setChapter={setChapter} />
 
       <div className="hidden overflow-hidden rounded-lg border border-slate-200 bg-white md:block">
         <table className="w-full border-collapse text-left text-sm">
@@ -57,7 +46,6 @@ export function GrammarList({ items, chapters, sources }: GrammarListProps) {
               <th className="px-4 py-3">句型</th>
               <th className="px-4 py-3">中文</th>
               <th className="px-4 py-3">例句</th>
-              <th className="px-4 py-3">章節</th>
               <th className="px-4 py-3">來源</th>
             </tr>
           </thead>
@@ -67,8 +55,7 @@ export function GrammarList({ items, chapters, sources }: GrammarListProps) {
                 <td className="px-4 py-4 text-base font-black text-ink">{item.pattern}</td>
                 <td className="whitespace-pre-line px-4 py-4 text-slate-700">{item.meaning_zh}</td>
                 <td className="px-4 py-4 text-slate-600">{item.example_sentence || "-"}</td>
-                <td className="px-4 py-4 text-slate-600">{item.chapters.join(", ") || "-"}</td>
-                <td className="px-4 py-4 text-slate-600">{item.source || "-"}</td>
+                <td className="px-4 py-4 text-slate-600">{courseSourceLabel(item) || "-"}</td>
               </tr>
             ))}
           </tbody>
@@ -81,7 +68,7 @@ export function GrammarList({ items, chapters, sources }: GrammarListProps) {
             <h2 className="text-xl font-black text-ink">{item.pattern}</h2>
             <p className="mt-2 whitespace-pre-line text-sm font-semibold leading-6 text-slate-700">{item.meaning_zh}</p>
             {item.example_sentence ? <p className="mt-3 text-sm leading-6 text-slate-600">{item.example_sentence}</p> : null}
-            <p className="mt-3 text-xs text-slate-500">{item.chapters.join(", ") || "未分類"} · {item.source || "未標示來源"}</p>
+            <p className="mt-3 text-xs text-slate-500">來源：{courseSourceLabel(item) || "-"}</p>
           </article>
         ))}
       </div>

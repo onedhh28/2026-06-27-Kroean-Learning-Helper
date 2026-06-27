@@ -30,7 +30,7 @@ export function LibraryFilters({
         onChange={(event) => setSearch(event.target.value)}
       />
       <select className="field" value={chapter} onChange={(event) => setChapter(event.target.value)}>
-        <option value="">全部章節</option>
+        <option value="">全部來源</option>
         {chapters.map((item) => (
           <option key={item} value={item}>
             {item}

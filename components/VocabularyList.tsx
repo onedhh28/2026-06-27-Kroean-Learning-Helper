@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { courseSourceLabel, partOfSpeechBadgeClass, partOfSpeechLabel } from "@/lib/display";
 import type { Vocabulary } from "@/lib/types";
 import { LibraryFilters } from "./LibraryFilters";
 
@@ -36,9 +37,8 @@ export function VocabularyList({ items, chapters }: VocabularyListProps) {
             <tr>
               <th className="px-4 py-3">韓文</th>
               <th className="px-4 py-3">意思</th>
-              <th className="px-4 py-3">詞性</th>
-              <th className="px-4 py-3">章節</th>
               <th className="px-4 py-3">來源</th>
+              <th className="px-4 py-3">詞性</th>
             </tr>
           </thead>
           <tbody>
@@ -46,9 +46,12 @@ export function VocabularyList({ items, chapters }: VocabularyListProps) {
               <tr key={item.id} className="border-t border-slate-100">
                 <td className="px-4 py-4 text-lg font-black text-ink">{item.korean}</td>
                 <td className="px-4 py-4 text-slate-700">{item.meaning}</td>
-                <td className="px-4 py-4 text-slate-600">{item.part_of_speech || "-"}</td>
-                <td className="px-4 py-4 text-slate-600">{item.chapters.join(", ") || "-"}</td>
-                <td className="px-4 py-4 text-slate-600">{item.source || "-"}</td>
+                <td className="px-4 py-4 text-slate-600">{courseSourceLabel(item) || "-"}</td>
+                <td className="px-4 py-4">
+                  <span className={`rounded-full px-2.5 py-1 text-xs font-bold ring-1 ${partOfSpeechBadgeClass(item.part_of_speech)}`}>
+                    {partOfSpeechLabel(item)}
+                  </span>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -60,11 +63,13 @@ export function VocabularyList({ items, chapters }: VocabularyListProps) {
           <article key={item.id} className="panel p-4">
             <div className="flex items-start justify-between gap-3">
               <h2 className="text-2xl font-black text-ink">{item.korean}</h2>
-              <span className="rounded-lg bg-mint px-2 py-1 text-xs font-bold text-teal">{item.part_of_speech || "單字"}</span>
+              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ring-1 ${partOfSpeechBadgeClass(item.part_of_speech)}`}>
+                {partOfSpeechLabel(item)}
+              </span>
             </div>
             <p className="mt-2 text-base font-semibold text-slate-700">{item.meaning}</p>
             {item.example_sentence ? <p className="mt-3 text-sm leading-6 text-slate-600">{item.example_sentence}</p> : null}
-            <p className="mt-3 text-xs text-slate-500">{item.chapters.join(", ") || "未分類"} · {item.source || "未標示來源"}</p>
+            <p className="mt-3 text-xs text-slate-500">來源：{courseSourceLabel(item) || "-"}</p>
           </article>
         ))}
       </div>

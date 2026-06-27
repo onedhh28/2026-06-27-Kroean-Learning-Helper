@@ -45,21 +45,32 @@ export function QuizRunner({ vocabulary, grammar, chapters }: QuizRunnerProps) {
     <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
       <section className="panel h-fit p-5">
         <h2 className="text-xl font-black text-ink">抽考設定</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-600">題數固定為單字最多 20 題、句型最多 20 題；題庫不足時能出幾題就出幾題。</p>
+        <p className="mt-2 text-sm leading-6 text-slate-600">
+          範圍可同時多選，來源以章節-小節格式顯示。題數固定為單字最多 20 題、句型最多 20 題。
+        </p>
+        <div className="mt-4 rounded-lg bg-slate-50 p-3 text-sm font-semibold text-slate-600">
+          已選：{selectedChapters.includes("全部") || selectedChapters.length === 0 ? "全部" : selectedChapters.join(", ")}
+        </div>
         <div className="mt-4 grid gap-2">
           <button
-            className={`btn-secondary justify-start ${selectedChapters.includes("全部") ? "border-teal bg-mint text-teal" : ""}`}
+            className={`flex min-h-12 items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm font-semibold transition ${
+              selectedChapters.includes("全部") ? "border-teal bg-mint text-teal" : "border-slate-300 bg-white text-slate-700"
+            }`}
             onClick={() => toggleChapter("全部")}
           >
-            全部
+            <span className={`h-5 w-5 rounded border ${selectedChapters.includes("全部") ? "border-teal bg-teal" : "border-slate-300 bg-white"}`} />
+            <span>全部</span>
           </button>
           {chapters.map((chapter) => (
             <button
               key={chapter}
-              className={`btn-secondary justify-start ${selectedChapters.includes(chapter) ? "border-teal bg-mint text-teal" : ""}`}
+              className={`flex min-h-12 items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm font-semibold transition ${
+                selectedChapters.includes(chapter) ? "border-teal bg-mint text-teal" : "border-slate-300 bg-white text-slate-700"
+              }`}
               onClick={() => toggleChapter(chapter)}
             >
-              {chapter}
+              <span className={`h-5 w-5 rounded border ${selectedChapters.includes(chapter) ? "border-teal bg-teal" : "border-slate-300 bg-white"}`} />
+              <span>{chapter}</span>
             </button>
           ))}
         </div>
@@ -72,7 +83,7 @@ export function QuizRunner({ vocabulary, grammar, chapters }: QuizRunnerProps) {
         {questions.length === 0 ? (
           <div className="panel p-8 text-center">
             <p className="text-lg font-black text-ink">尚未產生考題</p>
-            <p className="mt-2 text-sm text-slate-600">選擇章節後開始抽考。</p>
+            <p className="mt-2 text-sm text-slate-600">選擇來源後開始抽考。</p>
           </div>
         ) : (
           <>

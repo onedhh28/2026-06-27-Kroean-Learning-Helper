@@ -50,7 +50,7 @@ http://172.30.1.10:3000
       "korean": "날짜",
       "meaning": "日期 / date",
       "part_of_speech": "名詞",
-      "chapters": ["第1課"],
+      "chapters": ["1-1"],
       "source": "課本"
     }
   ],
@@ -61,7 +61,7 @@ http://172.30.1.10:3000
       "meaning_en": "go to a place",
       "cloze_question": "저는 학교__ 가요.",
       "cloze_answer": "에",
-      "chapters": ["第1課"],
+      "chapters": ["1-1"],
       "source": "課本"
     }
   ]
