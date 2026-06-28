@@ -1,4 +1,5 @@
 import type { Grammar, QuizAnswer, QuizSession, UserSettings, Vocabulary } from "./types";
+import { chapter52Grammar, chapter52Vocabulary } from "./chapter-5-2-data";
 
 export const mockVocabulary: Vocabulary[] = [
   {
@@ -130,12 +131,12 @@ export const mockVocabulary: Vocabulary[] = [
   {
     id: "vocab-5-3-7",
     korean: "밤",
-    meaning: "夜晚 / night",
+    meaning: "夜晚、晚上 / night",
     part_of_speech: "N",
     origin: "固有語",
     example_sentence: "",
     related_words: "낮",
-    chapters: ["5-3"],
+    chapters: ["5-2", "5-3"],
     source: "課本",
     quiz_count: 0,
     correct_streak: 0,
@@ -340,17 +341,18 @@ export const mockVocabulary: Vocabulary[] = [
   {
     id: "vocab-5-3-22",
     korean: "하루",
-    meaning: "一天 / day",
+    meaning: "一天 / day, one day",
     part_of_speech: "N",
     origin: "固有語",
     example_sentence: "",
     related_words: "",
-    chapters: ["5-3"],
+    chapters: ["5-2", "5-3"],
     source: "課本",
     quiz_count: 0,
     correct_streak: 0,
     familiarity: "no"
-  }
+  },
+  ...chapter52Vocabulary
 ];
 
 export const mockGrammar: Grammar[] = [
@@ -387,7 +389,8 @@ export const mockGrammar: Grammar[] = [
     quiz_count: 1,
     correct_streak: 1,
     familiarity: "no"
-  }
+  },
+  ...chapter52Grammar
 ];
 
 export const mockSettings: UserSettings = {
