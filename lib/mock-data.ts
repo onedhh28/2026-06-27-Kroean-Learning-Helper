@@ -1,5 +1,6 @@
 import type { Grammar, QuizAnswer, QuizSession, UserSettings, Vocabulary } from "./types";
 import { chapter52Grammar, chapter52Vocabulary } from "./chapter-5-2-data";
+import { chapter61Grammar, chapter61Vocabulary } from "./chapter-6-1-data";
 
 export const mockVocabulary: Vocabulary[] = [
   {
@@ -352,7 +353,8 @@ export const mockVocabulary: Vocabulary[] = [
     correct_streak: 0,
     familiarity: "no"
   },
-  ...chapter52Vocabulary
+  ...chapter52Vocabulary,
+  ...chapter61Vocabulary
 ];
 
 export const mockGrammar: Grammar[] = [
@@ -390,7 +392,8 @@ export const mockGrammar: Grammar[] = [
     correct_streak: 1,
     familiarity: "no"
   },
-  ...chapter52Grammar
+  ...chapter52Grammar,
+  ...chapter61Grammar
 ];
 
 export const mockSettings: UserSettings = {
