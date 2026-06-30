@@ -19,19 +19,40 @@ export function normalizeAnswer(value: string) {
     .replace(/\s+/g, "");
 }
 
+function stripParenthetical(value: string) {
+  return value.replace(/[（(][^）)]*[）)]/g, "").trim();
+}
+
+function answerVariants(value: string) {
+  const trimmed = value.trim();
+  const variants = [trimmed, stripParenthetical(trimmed)];
+  if (/^to\s+/i.test(trimmed)) variants.push(trimmed.replace(/^to\s+/i, "").trim());
+  if (/\d/.test(trimmed)) variants.push(trimmed.replace(/,/g, ""));
+  return variants;
+}
+
 export function splitAcceptedAnswers(value: string) {
-  return value
+  const protectedValue = value.replace(/(\d),(\d)/g, "$1__NUMBER_COMMA__$2");
+  const parts = protectedValue
     .split(/[/／;；,，、\n]|(?:\s+or\s+)|(?:\s+或\s+)/i)
-    .map((item) => item.trim())
+    .map((item) => item.replace(/__NUMBER_COMMA__/g, ",").trim())
     .filter(Boolean);
+  return parts.flatMap(answerVariants);
 }
 
 function unique(values: string[]) {
-  return Array.from(new Set(values.filter(Boolean)));
+  const seen = new Set<string>();
+  return values.filter((value) => {
+    if (!value) return false;
+    const normalized = normalizeAnswer(value);
+    if (!normalized || seen.has(normalized)) return false;
+    seen.add(normalized);
+    return true;
+  });
 }
 
 export function buildAcceptedAnswers(correctAnswer: string, extraAnswers: string[] = []) {
-  return unique([correctAnswer, ...splitAcceptedAnswers(correctAnswer), ...extraAnswers]);
+  return unique([correctAnswer, ...answerVariants(correctAnswer), ...splitAcceptedAnswers(correctAnswer), ...extraAnswers.flatMap(answerVariants)]);
 }
 
 export function isStringCorrect(userAnswer: string, correctAnswer: string, acceptedAnswers: string[] = []) {
