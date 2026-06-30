@@ -26,7 +26,7 @@ export default function HomePage() {
         <StatCard label="總單字" value={mockVocabulary.length} />
         <StatCard label="總文法" value={mockGrammar.length} tone="slate" />
         <StatCard label="最近抽考" value={`${latestSession.score_correct}/${latestSession.score_total}`} tone="coral" />
-        <StatCard label="學習記日器" value={`${days} 天`} />
+        <StatCard label="學習計日器" value={`${days} 天`} />
       </section>
 
       <section className="mt-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">

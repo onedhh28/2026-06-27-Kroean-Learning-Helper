@@ -400,7 +400,7 @@ export const mockGrammar: Grammar[] = [
 export const mockSettings: UserSettings = {
   id: "settings-1",
   user_id: "mock-user",
-  learning_start_date: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+  learning_start_date: "2026-06-08"
 };
 
 export const mockSessions: QuizSession[] = [
