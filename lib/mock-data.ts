@@ -301,6 +301,7 @@ export const mockVocabulary: Vocabulary[] = [
     id: "vocab-5-3-19",
     korean: "카메라",
     meaning: "相機 / camera",
+    accepted_answers: ["相機", "照相機", "camera"],
     part_of_speech: "N",
     origin: "外來語",
     example_sentence: "",

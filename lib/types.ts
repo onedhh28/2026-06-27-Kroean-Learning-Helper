@@ -5,6 +5,7 @@ export type Vocabulary = {
   user_id?: string;
   korean: string;
   meaning: string;
+  accepted_answers?: string[];
   part_of_speech?: string | null;
   origin?: string | null;
   example_sentence?: string | null;
@@ -87,6 +88,7 @@ export type QuizQuestion = {
   questionType: QuestionType;
   prompt: string;
   answer: string;
+  acceptedAnswers?: string[];
   options?: string[];
   selfGrade?: boolean;
 };

@@ -11,11 +11,33 @@ function inSelectedChapter(itemChapters: string[], selected: string[]) {
 }
 
 export function normalizeAnswer(value: string) {
-  return value.trim();
+  return value
+    .normalize("NFKC")
+    .toLowerCase()
+    .trim()
+    .replace(/[，,。．.、；;：:！？!?'"“”‘’`~（）()［\][\]{}<>《》〈〉]/g, "")
+    .replace(/\s+/g, "");
 }
 
-export function isStringCorrect(userAnswer: string, correctAnswer: string) {
-  return normalizeAnswer(userAnswer) === normalizeAnswer(correctAnswer);
+export function splitAcceptedAnswers(value: string) {
+  return value
+    .split(/[/／;；,，、\n]|(?:\s+or\s+)|(?:\s+或\s+)/i)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function unique(values: string[]) {
+  return Array.from(new Set(values.filter(Boolean)));
+}
+
+export function buildAcceptedAnswers(correctAnswer: string, extraAnswers: string[] = []) {
+  return unique([correctAnswer, ...splitAcceptedAnswers(correctAnswer), ...extraAnswers]);
+}
+
+export function isStringCorrect(userAnswer: string, correctAnswer: string, acceptedAnswers: string[] = []) {
+  const normalizedUserAnswer = normalizeAnswer(userAnswer);
+  if (!normalizedUserAnswer) return false;
+  return buildAcceptedAnswers(correctAnswer, acceptedAnswers).some((answer) => normalizeAnswer(answer) === normalizedUserAnswer);
 }
 
 export function updateFamiliarity(current: { quiz_count: number; correct_streak: number }, isCorrect: boolean) {
@@ -36,7 +58,8 @@ export function buildQuiz(vocabulary: Vocabulary[], grammar: Grammar[], selected
     itemId: item.id,
     questionType: "vocab_zh_to_ko",
     prompt: item.meaning,
-    answer: item.korean
+    answer: item.korean,
+    acceptedAnswers: [item.korean]
   }));
   const koToZh = vocabPool.slice(14, 20).map<QuizQuestion>((item) => ({
     id: `vocab-ko-zh-${item.id}`,
@@ -44,7 +67,8 @@ export function buildQuiz(vocabulary: Vocabulary[], grammar: Grammar[], selected
     itemId: item.id,
     questionType: "vocab_ko_to_zh",
     prompt: item.korean,
-    answer: item.meaning
+    answer: item.meaning,
+    acceptedAnswers: buildAcceptedAnswers(item.meaning, item.accepted_answers)
   }));
 
   const grammarPool = shuffle(grammar.filter((item) => inSelectedChapter(item.chapters, selectedChapters)));
@@ -57,7 +81,8 @@ export function buildQuiz(vocabulary: Vocabulary[], grammar: Grammar[], selected
       itemId: item.id,
       questionType: "grammar_cloze",
       prompt: item.cloze_question!,
-      answer: item.cloze_answer!
+      answer: item.cloze_answer!,
+      acceptedAnswers: [item.cloze_answer!]
     }));
 
   const clozeAnswers = grammarPool.map((item) => item.cloze_answer).filter(Boolean) as string[];
@@ -73,6 +98,7 @@ export function buildQuiz(vocabulary: Vocabulary[], grammar: Grammar[], selected
         questionType: "grammar_choice",
         prompt: item.cloze_question!,
         answer: item.cloze_answer!,
+        acceptedAnswers: [item.cloze_answer!],
         options: shuffle([item.cloze_answer!, ...distractors])
       };
     });

@@ -13,6 +13,7 @@ create table if not exists public.vocabulary (
   user_id uuid not null references auth.users(id) on delete cascade,
   korean text not null,
   meaning text not null,
+  accepted_answers text[] not null default '{}',
   part_of_speech text,
   origin text,
   example_sentence text,

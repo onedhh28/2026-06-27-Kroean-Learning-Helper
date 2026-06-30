@@ -21,7 +21,7 @@ export function QuizRunner({ vocabulary, grammar, chapters }: QuizRunnerProps) {
   const score = useMemo(() => {
     return questions.reduce((total, question) => {
       if (question.selfGrade) return total + (selfGrades[question.id] ? 1 : 0);
-      return total + (isStringCorrect(answers[question.id] || "", question.answer) ? 1 : 0);
+      return total + (isStringCorrect(answers[question.id] || "", question.answer, question.acceptedAnswers) ? 1 : 0);
     }, 0);
   }, [answers, questions, selfGrades]);
 
@@ -97,10 +97,6 @@ export function QuizRunner({ vocabulary, grammar, chapters }: QuizRunnerProps) {
                   <RotateCcw className="h-4 w-4" />
                   重抽
                 </button>
-                <button className="btn-primary" onClick={() => setSubmitted(true)}>
-                  <CheckCircle2 className="h-4 w-4" />
-                  交卷
-                </button>
               </div>
             </div>
 
@@ -116,7 +112,7 @@ export function QuizRunner({ vocabulary, grammar, chapters }: QuizRunnerProps) {
 
             {questions.map((question, index) => {
               const userAnswer = answers[question.id] || "";
-              const correct = question.selfGrade ? selfGrades[question.id] : isStringCorrect(userAnswer, question.answer);
+              const correct = question.selfGrade ? selfGrades[question.id] : isStringCorrect(userAnswer, question.answer, question.acceptedAnswers);
               return (
                 <article key={question.id} className="panel p-5">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
@@ -181,6 +177,12 @@ export function QuizRunner({ vocabulary, grammar, chapters }: QuizRunnerProps) {
                 </article>
               );
             })}
+            <div className="panel p-4">
+              <button className="btn-primary w-full" onClick={() => setSubmitted(true)}>
+                <CheckCircle2 className="h-4 w-4" />
+                交卷
+              </button>
+            </div>
           </>
         )}
       </section>
